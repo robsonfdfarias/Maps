@@ -56,28 +56,28 @@
         var formUpload = document.getElementById('uploadForm');
 
 
-        function selectImage(img) {
-            const fileInput = document.getElementById('fileInput');
+        // function selectImage(img) {
+        //     const fileInput = document.getElementById('fileInput');
 
-            // Cria um novo objeto FileList contendo a imagem
-            const file = new File([''], img, { type: 'image/png' });
-            const fileList = new DataTransfer();
-            fileList.items.add(file);
+        //     // Cria um novo objeto FileList contendo a imagem
+        //     const file = new File([''], img, { type: 'image/png' });
+        //     const fileList = new DataTransfer();
+        //     fileList.items.add(file);
 
-            // Define a nova FileList no input file
-            fileInput.files = fileList.files;
+        //     // Define a nova FileList no input file
+        //     fileInput.files = fileList.files;
 
-            // Mostra a imagem selecionada no preview
-            fileInput.addEventListener('change', function () {
-                const file = fileInput.files[0];
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    //   previewImage.src = e.target.result;
-                    //   previewImage.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            });
-        }
+        //     // Mostra a imagem selecionada no preview
+        //     fileInput.addEventListener('change', function () {
+        //         const file = fileInput.files[0];
+        //         const reader = new FileReader();
+        //         reader.onload = function (e) {
+        //             //   previewImage.src = e.target.result;
+        //             //   previewImage.style.display = 'block';
+        //         };
+        //         reader.readAsDataURL(file);
+        //     });
+        // }
 
         const map = new ol.Map({
             layers: [
@@ -155,19 +155,12 @@
                 allowTaint: true,
             }).then(canvas => {
                 const imageData2 = canvas.toDataURL("image/png").replace('data:image/png;base64,', '');
-                let img = document.createElement("img");
-                img.src = imageData2
                 imageData.value = imageData2;
-                document.body.appendChild(img)
-                canv = canvas
-                uploadFile(canvas, handleResponse); // Pass callback function
+                uploadFile(handleResponse); // Pass callback function
             });
         }
 
-        async function uploadFile(file2, callback) {
-            let img = document.createElement('img');
-            img.src = file2.toDataURL('image/png');
-            selectImage(img.src);
+        async function uploadFile(callback) {
 
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "upload.php");
@@ -177,9 +170,7 @@
                 porcentagem.innerHTML = perc;
             });
 
-            var formData = new FormData(formUpload);
-            formData.append("i", 1);
-            await xhr.send(formData);
+            await xhr.send(formUpload);
 
             xhr.addEventListener('load', function () {
                 callback(xhr.responseText); // Call callback with response
@@ -190,9 +181,9 @@
             let json = JSON.parse(responseText);
 
             if (json.status === 'ok') {
-                porcentagem.innerHTML = '<img id="previewImage" src="' + json.img + '" width="700">';
+                // porcentagem.innerHTML = '<img id="previewImage" src="' + json.img + '" width="700">';
             } else {
-                preview.innerHTML = 'Erro ao salvar: ' + json.error;
+                // preview.innerHTML = 'Erro ao salvar: ' + json.error;
             }
         }
 
